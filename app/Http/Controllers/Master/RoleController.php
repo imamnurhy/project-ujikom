@@ -11,15 +11,20 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
-    
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    protected $route = 'role.';
+    protected $view = 'master.';
+    protected $title = 'Master Role';
+    protected $subTitle = 'Role';
 
     public function index()
     {
-        return view('master.role');
+        $route = $this->route;
+        $title = $this->title;
+        $subTitle = $this->subTitle;
+
+        $permissions = Permission::all();
+
+        return view($this->view . 'role', compact('route', 'title', 'subTitle', 'permissions'));
     }
 
     public function store(Request $request)
@@ -46,7 +51,7 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|unique:roles,name,'.$id,
+            'name' => 'required|unique:roles,name,' . $id,
             'guard_name' => 'required'
         ]);
 
@@ -59,7 +64,7 @@ class RoleController extends Controller
             'message' => 'Data role berhasil diperbaharui.'
         ]);
     }
-    
+
     public function destroy($id)
     {
         Role::destroy($id);
@@ -73,21 +78,25 @@ class RoleController extends Controller
     public function api()
     {
         $role = Role::all();
-        
+
         return Datatables::of($role)
-            ->addColumn('permissions', function($p){
-                return count($p->permissions)." <a href='".route('role.permissions', $p->id)."' class='text-success pull-right' title='Edit Permissions'><i class='icon-clipboard-list2 mr-1'></i></a>";
+            ->addIndexColumn()
+            ->addColumn('permissions', function ($p) {
+                // return count($p->permissions) . " <a href='" . route('role.permissions', $p->id) . "' class='text-success pull-right' title='Edit Permissions'><i class='icon-clipboard-list2 mr-1'></i></a>";
+
+                return count($p->permissions) . " <a href='javascript:;' onclick='showPopupPermission($p->id)' class='text-success pull-right' title='Edit Permissions'><i class='icon-clipboard-list2 mr-1'></i></a>";
             })
-            ->addColumn('action', function($p){
-                return "
-                    <a href='#' onclick='edit(".$p->id.")' title='Edit Role'><i class='icon-pencil mr-1'></i></a>
-                    <a href='#' onclick='remove(".$p->id.")' class='text-danger' title='Hapus Role'><i class='icon-remove'></i></a>";
+            ->addColumn('action', function ($p) {
+                $editBtn = "<a onclick='edit(this)' title='Edit' data-url='" . route($this->route . 'edit', $p->id) . "' data-id='" . $p->id . "'><i class='icon-edit text-blue m-1'></i></a>";
+                $deteleBtn = "<a onclick='remove(this)' title='Hapus'  data-url='" . route($this->route . 'destroy', $p->id) . "'><i class='icon-remove text-red m-1'></i></a>";
+
+                return $editBtn . $deteleBtn;
             })
             ->rawColumns(['action', 'permissions'])
             ->toJson();
     }
 
-        //--- Permission
+    //--- Permission
     public function permissions($id)
     {
         $role = Role::findOrFail($id);

@@ -10,15 +10,18 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    protected $route = 'permission.';
+    protected $view = 'master.';
+    protected $title = 'Master Permission';
+    protected $subTitle = 'Permission';
 
     public function index()
     {
-        return view('master.permission');
+        $route = $this->route;
+        $title = $this->title;
+        $subTitle = $this->subTitle;
+
+        return view($this->view . 'permission', compact('route', 'title', 'subTitle'));
     }
 
     public function store(Request $request)
@@ -46,7 +49,7 @@ class PermissionController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|unique:permissions,name,'.$id,
+            'name' => 'required|unique:permissions,name,' . $id,
             'guard_name' => 'required'
         ]);
 
@@ -59,7 +62,7 @@ class PermissionController extends Controller
             'message' => 'Data permission berhasil diperbaharui.'
         ]);
     }
-    
+
     public function destroy($id)
     {
         Permission::destroy($id);
@@ -74,10 +77,13 @@ class PermissionController extends Controller
     {
         $permission = Permission::all();
         return Datatables::of($permission)
-            ->addColumn('action', function($p){
-                return "
-                    <a  href='#' onclick='edit(".$p->id.")' title='Edit Permission'><i class='icon-pencil mr-1'></i></a>
-                    <a href='#' onclick='remove(".$p->id.")' class='text-danger' title='Hapus Permission'><i class='icon-remove'></i></a>";
+            ->addIndexColumn()
+            ->addColumn('action', function ($p) {
+                $editBtn = "<a onclick='edit(this)' title='Edit' data-url='" . route($this->route . 'edit', $p->id) . "'><i class='icon-edit text-blue m-1'></i></a>";
+
+                $deteleBtn = "<a onclick='remove(this)' title='Hapus'  data-url='" . route($this->route . 'destroy', $p->id) . "'><i class='icon-remove text-red m-1'></i></a>";
+
+                return $editBtn . $deteleBtn;
             })
             ->rawColumns(['action'])
             ->toJson();

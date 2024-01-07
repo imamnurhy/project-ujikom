@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" type="image/x-icon">
-    <title>Form Login :: imam</title>
+    <title>Form Login :: Administrator</title>
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
     <style>
@@ -27,6 +27,34 @@
             top: 50%;
             left: 50%;
         }
+
+        .container-contact100 {
+            width: 100%;
+            min-height: 100vh;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            background: #3AD1D2;
+            background: linear-gradient(45deg, #00dbde, #277fdd, #26a65b, #D79F43);
+            background-size: 500% 500%;
+            -webkit-animation: container-contact100 12s ease infinite;
+            -moz-animation: container-contact100 12s ease infinite;
+            animation: container-contact100 20s ease infinite;
+        }
+
+        .wrap-contact100 {
+            width: 500px;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            padding: 42px 55px 45px 55px;
+        }
     </style>
 </head>
 
@@ -35,79 +63,98 @@
     <div id="loader" class="loader">
         <div class="plane-container">
             <div class="preloader-wrapper small active">
-                <div class="preloader-wrapper small active">
-                    <div class="spinner-layer spinner-blue-only">
-                        <div class="circle-clipper left">
-                            <div class="circle"></div>
-                        </div>
-                        <div class="gap-patch">
-                            <div class="circle"></div>
-                        </div>
-                        <div class="circle-clipper right">
-                            <div class="circle"></div>
-                        </div>
+                <div class="spinner-layer spinner-blue">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+
+                <div class="spinner-layer spinner-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+
+                <div class="spinner-layer spinner-yellow">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+
+                <div class="spinner-layer spinner-green">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="primary" class="blue4 p-t-b-100 height-full responsive-phone">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <img src="assets/img/icon/icon-plane.png" alt="">
-                </div>
-                <div class="col-lg-6 p-t-100">
-                    <div class="text-white">
-                        <h1>Selamat datang imam</h1>
-                        <p class="s-18 p-t-b-20 font-weight-lighter"></p>
-                    </div>
-                    <form method="POST" action="{{ route('login') }}" autocomplete="off">
-                        @csrf
-                        <div class="row">
+    <div id="primary" class="container-contact100">
+        <div class="wrap-contact100">
 
-                            {{-- Username --}}
-                            <div class="col-lg-6">
-                                <div class="form-group has-icon"><i class="icon-user"></i>
-                                    <input type="text"
-                                        class="form-control form-control-lg @if ($errors->has('username')) is-invalid @endif"
-                                        placeholder="Username" name="username" autocomplete="off"
-                                        value="{{ old('username') }}" required autofocus>
-                                    @if ($errors->has('username'))
-                                    <div class="invalid-feedback text-white" role="alert">
-                                        <strong>{{ $errors->first('username') }}</strong>
-                                    </div>
-                                    @endif
-                                </div>
-                            </div>
-
-                            {{-- Password --}}
-                            <div class="col-lg-6">
-                                <div class="form-group has-icon"><i class="icon-user-secret"></i>
-                                    <input type="password"
-                                        class="form-control form-control-lg @if ($errors->has('password')) is-invalid @endif"
-                                        placeholder="Password" name="password" autocomplete="off"
-                                        value="{{ old('password') }}" required>
-                                    @if ($errors->has('password'))
-                                    <div class="invalid-feedback text-white" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </div>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <input type="submit" class="btn btn-success btn-lg btn-block" value="login">
-                            </div>
-                        </div>
-                    </form>
-                </div>
+            <div class="text-center">
+                <img src="assets/img/dummy/u4.png" alt="">
+                <h3 class="mt-2">Welcome Back</h3>
+                <p class="p-t-b-20">Hey Admin Network Service Enginering </p>
             </div>
+
+
+            <form method="POST" action="{{ route('login') }}" autocomplete="off">
+                @csrf
+                <div class="form-group has-icon"><i class="icon-envelope-o"></i>
+                    <input type="text"
+                        class="form-control form-control-lg @if ($errors->has('username')) is-invalid @endif"
+                        placeholder="Username" name="username" autocomplete="off" value="{{ old('username') }}" required
+                        autofocus>
+                    @if ($errors->has('username'))
+                        <div class="invalid-feedback text-white" role="alert">
+                            <strong>{{ $errors->first('username') }}</strong>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="form-group has-icon"><i class="icon-user-secret"></i>
+                    <input type="password"
+                        class="form-control form-control-lg @if ($errors->has('password')) is-invalid @endif "
+                        placeholder="Password" name="password" autocomplete="off" value="{{ old('password') }}"
+                        required>
+                    @if ($errors->has('password'))
+                        <div class="invalid-feedback text-white" role="alert">
+                            <strong>{{ $errors->first('password') }}</strong>
+                        </div>
+                    @endif
+                </div>
+                <input type="submit" class="btn btn-success btn-lg btn-block" value="Log In">
+            </form>
         </div>
     </div>
     <script type="text/javascript">
-        var APP_URL = {!! json_encode(url('/').'/') !!}
+        var APP_URL = "{!! json_encode(url('/') . '/') !!}";
     </script>
     <script src="{{ asset('assets/js/app.js') }}"></script>
 </body>

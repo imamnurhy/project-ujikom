@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Master;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Yajra\DataTables\Datatables;
 use Spatie\Permission\Models\Role;
 
 use App\Models\Pegawai;
@@ -12,52 +11,10 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+    protected $route = 'user.';
+    protected $view = 'master.';
+    protected $title = 'Master User';
+    protected $subTitle = 'Pengguna';
 
     /**
      * Show the form for editing the specified resource.
@@ -69,7 +26,11 @@ class UserController extends Controller
     {
         $user = user::find($id);
         $roles = Role::all();
-        return view('master._user.edit', compact('user', 'roles'));
+
+        return response()->json([
+            'user' => $user,
+            'roles' => $roles,
+        ]);
     }
 
     /**
@@ -88,10 +49,7 @@ class UserController extends Controller
                 $user->status = $c_status;
                 $user->save();
 
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Data user berhasil diperbaharui. Status user ' . $c_status
-                ]);
+                return response('Data user berhasil diperbaharui. Status user ' . $c_status);
                 break;
             case 2:
                 $request->validate([
@@ -103,10 +61,7 @@ class UserController extends Controller
                 $user->username = $username;
                 $user->save();
 
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Data user berhasil diperbaharui. Username user ' . $username
-                ]);
+                return response('Data user berhasil diperbaharui. Username user ' . $username);
                 break;
             case 3:
                 $request->validate([
@@ -118,19 +73,13 @@ class UserController extends Controller
                 $user->password = $password;
                 $user->save();
 
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Data user berhasil diperbaharui. Password user ' . $request->password
-                ]);
+                return response('Data user berhasil diperbaharui. Password user ' . $request->password);
                 break;
             case 4:
                 $user = User::findOrFail($id);
                 $user->assignRole($request->roles);
 
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Data role berhasil diperbaharui'
-                ]);
+                return response('Data role berhasil diperbaharui');
                 break;
         }
     }
@@ -157,10 +106,10 @@ class UserController extends Controller
         $pegawai = Pegawai::findOrFail($pegawai_id);
         if ($pegawai->user_id == 0) {
             $user = User::updateOrCreate([
-                'username' => $pegawai->n_pegawai,
-                'password' => bcrypt('123456'),
+                'username'  => $pegawai->n_pegawai,
+                'password'  => bcrypt('123456'),
                 'lastlogin' => '',
-                'status' => 1
+                'status'    => 1
             ]);
             $user_id = $user->id;
             $pegawai->user_id = $user_id;
@@ -168,7 +117,8 @@ class UserController extends Controller
         } else {
             $user_id = $pegawai->user_id;
         }
-        return redirect()->route('user.edit', $user_id);
+        $user = User::find($user_id);
+        return $user;
     }
 
     public function getRoles($id)
